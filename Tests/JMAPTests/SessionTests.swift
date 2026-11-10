@@ -52,7 +52,6 @@ struct SessionTests {
     }
 }
 
-// swift-format-ignore
 private let data: Data = """
 {
     "state": "cyrus-0;p-67bb868361;s-68403d307e150478",

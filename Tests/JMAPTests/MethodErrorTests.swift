@@ -17,7 +17,6 @@ struct MethodErrorTests {
     }
 }
 
-// swift-format-ignore
 private let data: Data = """
 [
     [

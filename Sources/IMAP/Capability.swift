@@ -24,7 +24,7 @@ public struct Capability: CustomStringConvertible, Equatable, Hashable, RawRepre
     }
 
     public static func status(_ status: Status) -> Self {
-        Capability(.status(NIOIMAPCore.Capability.StatusKind(status.rawValue)))
+        Capability(.status(NIOIMAPCore.Capability.StatusKind(status.rawValue)!))
     }
 
     public static func authenticate(_ mechanism: Authentication.Mechanism) -> Self {

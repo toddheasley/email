@@ -165,7 +165,6 @@ struct EmailTests {
     }
 }
 
-// swift-format-ignore
 private let data: Data = """
 [
     {

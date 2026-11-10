@@ -77,6 +77,12 @@ extension IMAPCommandHandler where InboundIn == Response, Result == Void {
     }
 }
 
+extension TaggedCommand {
+    init(tag: String, command: Command) {
+        self.init(tag: Command.Tag(stringLiteral: tag), command: command)
+    }
+}
+
 extension Int64 {
     static let timeout: Self = 60  // Practical default
 }

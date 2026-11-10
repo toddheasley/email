@@ -17,13 +17,12 @@ struct StringTests {
         #expect(attributes.filter({ $0.name == "src" }).first?.value == "test.png")
         #expect(attributes.filter({ $0.name == "src" }).last?.value == "a test.png")
     }
-
+    
     @Test func htmlTagsStripped() {
         #expect(_htmlTagsStripped.htmlTagsStripped() == "Desktop Help\nFind the help you need configuring and using Thunderbird Desktop.")
     }
 }
 
-// swift-format-ignore
 private let _htmlAttributes: String = """
 <!-- Source - https://stackoverflow.com/a/317081
      Posted by VonC, modified by community
@@ -42,7 +41,6 @@ private let _htmlAttributes: String = """
 <img src=a test.png alt=crap >
 """
 
-// swift-format-ignore
 private let _htmlTagsStripped: String = """
 <div class="entry-text">
     <h2 aria-label="Desktop Help.">Desktop Help</h2>

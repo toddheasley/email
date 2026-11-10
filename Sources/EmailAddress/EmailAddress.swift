@@ -4,11 +4,11 @@
 
 import Foundation
 
+// Universal email address models for IMAP, JMAP and SMTP
 public protocol EmailAddressProtocol: Sendable {
     var addresses: [EmailAddress] { get }
 }
 
-/// Shared email address model suitable for IMAP, JMAP and SMTP
 public struct EmailAddress: CustomStringConvertible, EmailAddressProtocol, ExpressibleByStringLiteral, Hashable, Identifiable, Sendable {
     public let value: String
     public let label: String?

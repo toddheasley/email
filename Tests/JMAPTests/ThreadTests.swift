@@ -13,7 +13,6 @@ struct ThreadTests {
     }
 }
 
-// swift-format-ignore
 private let data: Data = """
 [
     {

@@ -56,17 +56,14 @@ struct ContentDispositionTests {
     }
 }
 
-// swift-format-ignore
 private let attachmentArchive: String = """
 attachment; filename="mime-part.zip"; creation-date="Mon, 31 Oct 1977 03:14:00-0500"; modification-date="Mon, 31 Oct 1977 08:14:00 +0000 (GMT)"
 """
 
-// swift-format-ignore
 private let attachmentPNG: String = """
 attachment; filename="mime-part.png"
 """
 
-// swift-format-ignore
 private let inlineJPEG: String = """
 inline; filename="mime-part.jpg"; modification-date="Mon, 31 Oct 1977 08:14:00 +0000 (GMT)"
 """

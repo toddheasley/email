@@ -32,7 +32,6 @@ struct RequestEncoderTests {
     }
 }
 
-// swift-format-ignore
 private let example: String = """
 From: Sender Name <sender@example.com>\r
 To: Recipient Name <recipient@example.com> no.name@exmaple.com\r

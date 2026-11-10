@@ -4,32 +4,31 @@
 
 public struct TokenResponse: Decodable {
     public let accessToken: String
-    public let expiresIn: Int
     public let refreshToken: String
-
+    public let expiresIn: Double
+    
     // MARK: Decodable
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: Key.self)
         accessToken = try container.decode(String.self, forKey: .accessToken)
-        expiresIn = try container.decode(Int.self, forKey: .expiresIn)
         refreshToken = try container.decode(String.self, forKey: .refreshToken)
+        expiresIn = try container.decode(Double.self, forKey: .expiresIn)
     }
-
 }
 
 public struct RefreshTokenResponse: Decodable {
     public let accessToken: String
-    public let expiresIn: Int
-
+    public let expiresIn: Double
+    
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: Key.self)
         accessToken = try container.decode(String.self, forKey: .accessToken)
-        expiresIn = try container.decode(Int.self, forKey: .expiresIn)
+        expiresIn = try container.decode(Double.self, forKey: .expiresIn)
     }
 }
 
 private enum Key: String, CodingKey {
     case accessToken = "access_token"
-    case expiresIn = "expires_in"
     case refreshToken = "refresh_token"
+    case expiresIn = "expires_in"
 }

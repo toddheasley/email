@@ -12,7 +12,6 @@ struct SetErrorTests {
     }
 }
 
-// swift-format-ignore
 private let data: Data = """
 {
     "properties": [

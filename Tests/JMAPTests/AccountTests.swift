@@ -27,7 +27,6 @@ struct AccountTests {
     }
 }
 
-// swift-format-ignore
 private let data: Data = """
 {
     "accountCapabilities": {

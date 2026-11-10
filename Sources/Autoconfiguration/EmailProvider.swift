@@ -23,21 +23,21 @@ public struct EmailProvider: Decodable {
                 }
             }
         }
-
+        
         public enum ServerType: String, CaseIterable, CustomStringConvertible, Decodable {
             case imap, pop3, smtp
 
             // MARK: CustomStringConvertible
             public var description: String { rawValue.uppercased() }
         }
-
+        
         public enum SocketType: String, CaseIterable, CustomStringConvertible, Decodable {
             case startTLS = "STARTTLS", ssl = "SSL"
 
             // MARK: CustomStringConvertible
             public var description: String { rawValue }
         }
-
+        
         public let authentication: [Authentication]
         public let hostname: String
         public let port: Int
@@ -45,7 +45,7 @@ public struct EmailProvider: Decodable {
         public let socketType: SocketType
         public let username: String
     }
-
+    
     public let displayName: String
     public let displayShortName: String
     public let documentation: [URL]
