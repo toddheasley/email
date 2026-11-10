@@ -28,6 +28,9 @@ let package: Package = Package(name: "Email", platforms: [
         .library(name: "MIME", targets: [
             "MIME"
         ]),
+        .library(name: "OAuth2", targets: [
+            "OAuth2"
+        ]),
         .library(name: "SMTP", targets: [
             "SMTP"
         ])
@@ -40,12 +43,12 @@ let package: Package = Package(name: "Email", platforms: [
         .package(url: "https://github.com/apple/swift-nio-ssl", branch: "main"),
         .package(url: "https://github.com/apple/swift-nio-transport-services", branch: "main")
     ], targets: [
-        .target(name: "Autoconfiguration", dependencies: [
-            .product(name: "AsyncDNSResolver", package: "swift-async-dns-resolver")
-        ]),
         .executableTarget(name: "AutoconfigurationCLI", dependencies: [
             .product(name: "ArgumentParser", package: "swift-argument-parser"),
             "Autoconfiguration"
+        ]),
+        .target(name: "Autoconfiguration", dependencies: [
+            .product(name: "AsyncDNSResolver", package: "swift-async-dns-resolver")
         ]),
         .testTarget(name: "AutoconfigurationTests", dependencies: [
             "Autoconfiguration"
@@ -56,6 +59,7 @@ let package: Package = Package(name: "Email", platforms: [
             "IMAP",
             "JMAP",
             "MIME",
+            "OAuth2",
             "SMTP"
         ]),
         .testTarget(name: "EmailTests", dependencies: [
@@ -88,6 +92,10 @@ let package: Package = Package(name: "Email", platforms: [
             "MIME"
         ], resources: [
             .process("Resources")
+        ]),
+        .target(name: "OAuth2"),
+        .testTarget(name: "OAuth2Tests", dependencies: [
+            "OAuth2"
         ]),
         .target(name: "SMTP", dependencies: [
             .product(name: "NIO", package: "swift-nio"),

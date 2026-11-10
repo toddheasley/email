@@ -8,12 +8,12 @@ struct DomainParser {
     let domain: String
     let host: String
     let suffix: String
-
+    
     init(_ emailAddress: String, suffixList: [String]) throws {
         let host: String = try emailAddress.host
         try self.init(host: host, suffixList: suffixList)
     }
-
+    
     init(host: String, suffixList: [String]) throws {
         guard let suffix: String = suffixList.filter({ host.hasSuffix(".\($0)") }).last else {
             throw URLError(.dnsLookupFailed)

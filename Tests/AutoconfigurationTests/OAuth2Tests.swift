@@ -7,62 +7,6 @@ import Foundation
 import Testing
 
 struct OAuth2Tests {
-    @Test func pkceGeneratesRFC7636Verifier() {
-        let pkce = OAuth2.PKCE()
-        let allowedCharacters = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~")
-
-        #expect(pkce.codeVerifier.count == 43)
-        #expect(pkce.codeVerifier.unicodeScalars.allSatisfy { allowedCharacters.contains($0) })
-    }
-
-    @Test func pkceRFC7636TestVector() {
-        let pkce = OAuth2.PKCE(codeVerifier: "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk")
-
-        #expect(pkce.codeChallenge == "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM")
-    }
-
-    @Test func authURLIncludesPKCEChallenge() throws {
-        let configuration: OAuth2.Configuration = try OAuth2.Configuration(
-            authURI: "https://example.com/authorize",
-            tokenURI: "https://example.com/token",
-            redirectURI: "com.example:/oauth2redirect",
-            responseType: "code",
-            scope: [
-                "mail-w"
-            ],
-            clientID: "Cl13n+-ID"
-        )
-        let pkce = OAuth2.PKCE(codeVerifier: "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk")
-        let queryItems = URLComponents(
-            url: configuration.authURL(hint: "user@example.com", pkce: pkce),
-            resolvingAgainstBaseURL: false
-        )?.queryItems
-
-        #expect(queryItems?.first(where: { $0.name == "code_challenge" })?.value == pkce.codeChallenge)
-        #expect(queryItems?.first(where: { $0.name == "code_challenge_method" })?.value == "S256")
-        #expect(queryItems?.first(where: { $0.name == "login_hint" })?.value == "user@example.com")
-    }
-
-    @Test func matches() throws {
-        let configuration: OAuth2.Configuration = try OAuth2.Configuration(
-            authURI: "https://example.com/authorize",
-            tokenURI: "https://example.com/token",
-            redirectURI: "com.example:/oauth2redirect",
-            responseType: "code",
-            scope: [
-                "mail-w"
-            ],
-            clientID: "Cl13n+-ID",
-            hosts: [
-                "example.com",
-                "examplemail.com"
-            ]
-        )
-        #expect(configuration.matches("google.com") == false)
-        #expect(configuration.matches("mail.example.com") == true)
-        #expect(configuration.matches("examplemail.com") == true)
-        #expect(configuration.matches("mail.com") == false)
-    }
     @Test func decoderInit() throws {
         let oauth2: [OAuth2] = try JSONDecoder().decode([OAuth2].self, from: data)
         #expect(
@@ -83,7 +27,6 @@ struct OAuth2Tests {
     }
 }
 
-// swift-format-ignore
 let data: Data = """
 [
     {

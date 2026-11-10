@@ -8,7 +8,7 @@ import Foundation
 struct SuffixListParser: CustomStringConvertible {
     let suffixList: [String]
     let data: Data
-
+    
     init(data: Data) throws {
         guard let description: String = String(data: data, encoding: .utf8) else {
             throw URLError(.cannotDecodeRawData)
@@ -20,7 +20,7 @@ struct SuffixListParser: CustomStringConvertible {
         self.data = data
         self.description = description
     }
-
+    
     // MARK: CustomStringConvertible
     let description: String
 }

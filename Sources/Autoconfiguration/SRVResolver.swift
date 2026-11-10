@@ -9,7 +9,7 @@ import dnssd
 // Adapted from https://github.com/jamf/NoMAD-2/blob/main/NoMAD/SRVLookups/SRVResolver.swift
 class SRVResolver {
     let timeoutInterval: TimeInterval
-
+    
     func query(_ query: String) async throws -> [SRVRecord] {
         try await withCheckedThrowingContinuation { continuation in
             self.query(query) { result in
@@ -22,13 +22,13 @@ class SRVResolver {
             }
         }
     }
-
+    
     init(timeoutInterval: TimeInterval = 1.0) {
         self.timeoutInterval = timeoutInterval
     }
-
+    
     private typealias Completion = (Result<[SRVRecord], Error>) -> Void
-
+    
     private var completion: Completion?
     private var records: [SRVRecord] = []
     private var query: String?
@@ -36,7 +36,7 @@ class SRVResolver {
     private var timeoutTimer: DispatchSourceTimer?
     private var serviceRef: DNSServiceRef?
     private var socket: dnssd_sock_t = -1
-
+    
     private let queue: DispatchQueue = DispatchQueue(label: "SRV")
     private let callback: DNSServiceQueryRecordReply = { _, flags, _, _, _, _, _, rdlen, rdata, _, context in
         guard let context else { return }
@@ -51,7 +51,7 @@ class SRVResolver {
             resolver.completion?(.success(resolver.records))
         }
     }
-
+    
     private func query(_ query: String, completion: Completion? = nil) {
         self.completion = completion
         self.query = query
@@ -95,12 +95,12 @@ class SRVResolver {
             fail()
         }
     }
-
+    
     private func fail() {
         cancel()
         completion?(.failure(URLError(.cannotFindHost)))
     }
-
+    
     private func cancel() {
         dispatchSourceRead?.cancel()
         timeoutTimer?.cancel()

@@ -6,21 +6,19 @@ import Foundation
 
 // Translate client config XML into JSON
 class XMLToJSONParser: NSObject, XMLParserDelegate {
-    private(set) var emailAddress: String!
     private(set) var dictionary: [String: Any] = [:]
-
+    private(set) var emailAddress: String!
+    
     var data: Data {
         get throws {
-            try JSONSerialization.data(
-                withJSONObject: dictionary,
-                options: [
-                    .withoutEscapingSlashes,
-                    .prettyPrinted,
-                    .sortedKeys
-                ])
+            try JSONSerialization.data(withJSONObject: dictionary, options: [
+                .withoutEscapingSlashes,
+                .prettyPrinted,
+                .sortedKeys
+            ])
         }
     }
-
+    
     init(_ emailAddress: String, data: Data) {
         parser = XMLParser(data: data)
         super.init()
@@ -28,14 +26,14 @@ class XMLToJSONParser: NSObject, XMLParserDelegate {
         parser.delegate = self
         parser.parse()
     }
-
+    
     private let parser: XMLParser
     private var element: (name: String, value: String?)?
     private var emailProvider: [String: Any]?
     private var oAuth2: [String: Any]?
     private var webMail: [String: Any]?
     private var server: [String: Any]?
-
+    
     private enum Key: CodingKey {
         case clientConfig
         case emailProvider
@@ -46,17 +44,11 @@ class XMLToJSONParser: NSObject, XMLParserDelegate {
         case oAuth2, authURL, issuer, scope, tokenURL
         case webMail, loginPage
     }
-
+    
     // MARK: XMLParserDelegate
     func parserDidStartDocument(_ parser: XMLParser) {}
-
-    func parser(
-        _ parser: XMLParser,
-        didStartElement elementName: String,
-        namespaceURI: String?,
-        qualifiedName qName: String?,
-        attributes attributeDict: [String: String] = [:]
-    ) {
+    
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String: String] = [:]) {
         switch Key(stringValue: elementName) {
         case .clientConfig:
             dictionary[Key.clientConfig.stringValue] = [:]
@@ -76,8 +68,7 @@ class XMLToJSONParser: NSObject, XMLParserDelegate {
             element = (elementName, nil)
         case .documentation, .instruction:
             if var documentation: [String] = emailProvider?[Key.documentation.stringValue] as? [String],
-                let url: String = attributeDict[Key.url.stringValue]
-            {
+               let url: String = attributeDict[Key.url.stringValue] {
                 documentation.append(url)
                 emailProvider?[Key.documentation.stringValue] = documentation
             }
@@ -95,24 +86,17 @@ class XMLToJSONParser: NSObject, XMLParserDelegate {
             break
         }
     }
-
+    
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         let string: String = string.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !string.isEmpty else { return }
         element?.value = string.applying(emailAddress)
     }
-
-    func parser(
-        _ parser: XMLParser,
-        didEndElement elementName: String,
-        namespaceURI: String?,
-        qualifiedName qName: String?
-    ) {
+    
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         switch Key(stringValue: elementName) {
         case .emailProvider:
-            if var clientConfig: [String: Any] = dictionary[Key.clientConfig.stringValue] as? [String: Any],
-                let emailProvider
-            {
+            if var clientConfig: [String: Any] = dictionary[Key.clientConfig.stringValue] as? [String: Any], let emailProvider {
                 clientConfig[Key.emailProvider.stringValue] = emailProvider
                 dictionary[Key.clientConfig.stringValue] = clientConfig
             }
@@ -126,17 +110,13 @@ class XMLToJSONParser: NSObject, XMLParserDelegate {
             }
             element = nil
         case .incomingServer, .outgoingServer:
-            if var servers: [[String: Any]] = emailProvider?[Key.servers.stringValue] as? [[String: Any]],
-                let server
-            {
+            if var servers: [[String: Any]] = emailProvider?[Key.servers.stringValue] as? [[String: Any]], let server {
                 servers.append(server)
                 emailProvider?[Key.servers.stringValue] = servers
             }
             server = nil
         case .authentication:
-            if let name: String = element?.name, let value: String = element?.value,
-                var authentication = server?[name] as? [Any]
-            {
+            if let name: String = element?.name, let value: String = element?.value, var authentication = server?[name] as? [Any] {
                 authentication.append(value)
                 server?[name] = authentication
             }
@@ -147,9 +127,7 @@ class XMLToJSONParser: NSObject, XMLParserDelegate {
             }
             element = nil
         case .oAuth2:
-            if var clientConfig: [String: Any] = dictionary[Key.clientConfig.stringValue] as? [String: Any],
-                let oAuth2
-            {
+            if var clientConfig: [String: Any] = dictionary[Key.clientConfig.stringValue] as? [String: Any], let oAuth2 {
                 clientConfig[Key.oAuth2.stringValue] = oAuth2
                 dictionary[Key.clientConfig.stringValue] = clientConfig
             }
@@ -160,9 +138,7 @@ class XMLToJSONParser: NSObject, XMLParserDelegate {
             }
             element = nil
         case .webMail:
-            if var clientConfig: [String: Any] = dictionary[Key.clientConfig.stringValue] as? [String: Any],
-                let webMail
-            {
+            if var clientConfig: [String: Any] = dictionary[Key.clientConfig.stringValue] as? [String: Any], let webMail {
                 clientConfig[Key.webMail.stringValue] = webMail
                 dictionary[Key.clientConfig.stringValue] = clientConfig
             }
@@ -171,7 +147,7 @@ class XMLToJSONParser: NSObject, XMLParserDelegate {
             break
         }
     }
-
+    
     func parserDidEndDocument(_ parser: XMLParser) {}
 }
 

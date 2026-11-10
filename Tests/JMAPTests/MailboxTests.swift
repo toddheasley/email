@@ -84,7 +84,6 @@ extension MailboxTests {
 
 private let id: UUID = UUID(uuidString: "AFF25F76-8105-413F-9CF7-F66B7703B8BD")!
 
-// swift-format-ignore
 private let data: Data = """
 [
     {

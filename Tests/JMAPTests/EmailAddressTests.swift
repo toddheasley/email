@@ -38,7 +38,6 @@ struct EmailAddressTests {
     }
 }
 
-// swift-format-ignore
 private let data: Data = """
 [
     {

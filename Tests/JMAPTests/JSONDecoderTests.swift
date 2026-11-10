@@ -15,7 +15,7 @@ struct JSONDecoderTests {
         #expect(dates[2].timeIntervalSince1970 == 1751123625.0)
     }
 }
-// swift-format-ignore
+
 private let data: Data = """
 [
     "2025-06-27T16:52:45-04:00",

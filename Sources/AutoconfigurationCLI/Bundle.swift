@@ -7,7 +7,6 @@ import Cocoa
 #endif
 import Foundation
 
-// swift-format-ignore
 extension Bundle {
     var executableDirectory: URL { executableURL!.deletingLastPathComponent() }
 

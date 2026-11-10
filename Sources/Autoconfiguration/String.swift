@@ -7,16 +7,13 @@ import Foundation
 extension String {
     public var host: Self {
         get throws {
-            // Ensure valid host/domain with `URL` initializer, then discard the `URL`.
-            guard let url: URL = URL(string: "http://\(components(separatedBy: "@").last!)"),
-                let host: String = url.host()
-            else {
-                throw URLError(.cannotFindHost)
+            guard let url: URL = URL(string: "http://\(components(separatedBy: "@").last!)"), let host: String = url.host() else {
+                throw URLError(.cannotFindHost) // Ensure valid host/domain, then discard `URL`
             }
             return host
         }
     }
-
+    
     public var local: Self {
         get throws {
             guard contains("@") else {
@@ -25,7 +22,7 @@ extension String {
             return components(separatedBy: "@").dropLast().joined(separator: "@")
         }
     }
-
+    
     public func query(_ service: Service) throws -> Self {
         "_\(service.rawValue)._tcp.\(try host)"
     }

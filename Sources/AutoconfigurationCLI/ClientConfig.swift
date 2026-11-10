@@ -26,7 +26,6 @@ extension ClientConfig {
     }
 }
 
-// swift-format-ignore
 private func open(_ url: URL) {
 #if canImport(Cocoa)
     NSWorkspace.shared.open(url)

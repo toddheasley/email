@@ -7,6 +7,7 @@
 @_exported import IMAP
 @_exported import JMAP
 @_exported import MIME
+@_exported import OAuth2
 @_exported import SMTP
 import Foundation
 
@@ -33,13 +34,13 @@ public struct Account: Codable, Equatable, Hashable, Identifiable, Sendable {
     public var outgoingServer: Server? { server(.jmap) ?? server(.smtp) ?? nil }
     public var emailAddress: EmailAddress? { identities.first }
     public private(set) var authChanged: Date?
-
-    public var authConfig: OAuth2.Configuration? {
+    
+    public var authConfig: OAuth2Configuration? {
         get async throws {
             guard let emailAddress else {
                 throw AccountError.emailAddressNotFound
             }
-            return try await OAuth2.configuration(emailAddress.value)
+            return try await .configuration(emailAddress.value)
         }
     }
 
@@ -279,5 +280,18 @@ private extension EmailAddress {
             }
             return false
         }
+    }
+}
+
+private extension OAuth2Configuration {
+    static func configuration(_ emailAddress: String) async throws -> Self {
+        let records: [MXRecord] = try await DNSResolver.queryMX(emailAddress)
+        for record in records {
+            for configuration in OAuth2Configuration.allCases {
+                guard configuration.matches(record.host) else { continue }
+                return configuration
+            }
+        }
+        throw URLError(.unsupportedURL)
     }
 }

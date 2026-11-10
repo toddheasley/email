@@ -73,7 +73,7 @@ public final class AccountManager {
 
     public func checkAndRenewExpirations() async {
         for account in allAccounts {
-            guard account.authenticationType == .oAuth2, account.authorization.isExpired,
+            guard account.authenticationType == .oauth2, account.authorization.isExpired,
                 let refreshToken: String = account.authorization.refreshToken,
                 let user: String = account.incomingServer?.username
             else {
@@ -81,7 +81,7 @@ public final class AccountManager {
             }
             do {
                 var account: Account = account
-                guard let authConfig: OAuth2.Configuration = try await account.authConfig else {
+                guard let authConfig: OAuth2Configuration = try await account.authConfig else {
                     throw URLError(.unsupportedURL)
                 }
                 account.authorization = try await renewExpiredToken(
@@ -95,12 +95,9 @@ public final class AccountManager {
         }
     }
 
-    private func renewExpiredToken(authConfig: OAuth2.Configuration, refreshToken: String, user: String, retry attempts: Int = 2) async throws -> Authorization {
+    private func renewExpiredToken(authConfig: OAuth2Configuration, refreshToken: String, user: String, retry attempts: Int = 2) async throws -> Authorization {
         do {
-            let tokenRequest: URLRequest = try .refreshToken(
-                authConfig,
-                refreshToken: refreshToken
-            )
+            let tokenRequest: URLRequest = try .refreshToken(refreshToken, configuration: authConfig)
             let data: Data = try await URLSession.shared.data(for: tokenRequest).0
             let response: RefreshTokenResponse = try JSONDecoder().decode(RefreshTokenResponse.self, from: data)
             let token: Token = .bearer(

@@ -10,13 +10,13 @@ import Foundation
 struct Autoconfig: AsyncParsableCommand {
     @Argument(help: "Specify email address to query.")
     var emailAddress: String
-
+    
     @Flag(name: .shortAndLong, help: "Save config files to working directory.")
     var save: Bool = false
-
+    
     @Flag(name: .shortAndLong, help: "Open URLs; show saved files in Finder.")
     var open: Bool = false
-
+    
     // MARK: AsyncParsableCommand
     func run() async throws {
         // Routine explodes the paths that `URLSession.autoconfig(_ emailAddress:)` follows
@@ -40,7 +40,7 @@ struct Autoconfig: AsyncParsableCommand {
             Bundle.main.showExecutableInFinder()
         }
     }
-
+    
     @discardableResult private func query(_ emailAddress: String, domain: String? = nil) async throws -> Bool {
         var found: Bool = false  // Keep track of findings while looping sources
         for source in Source.allCases {
